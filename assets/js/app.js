@@ -2,6 +2,9 @@ const endpoint = "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb
 
 const cities = [];
 
+const searchInput = document.querySelector(".search");
+const suggestions = document.querySelector(".suggestions");
+
 fetch(endpoint)
     .then(res => res.json())
     .then(data => cities.push(...data));
@@ -22,24 +25,23 @@ function numberWithCommas(x) {
 function displayMatches() {
     const matchArray = findMatches(this.value, cities);
     const html = matchArray
-        .map(place => {
-            const regex = new RegExp(this.value, 'gi');
-            const cityName = place.city.replace(regex, `<span class = "h1"> ${this.value} </span>`);
-            const stateName = place.state.replace(regex, `<span class = "h1"> ${this.value} </span>`);
+    .map(place => {
+        const regex = new RegExp(this.value, 'gi');
+        const cityName = place.city.replace(regex, `<span class = "keyword"> ${this.value} </span>`);
+        const stateName = place.state.replace(regex, `<span class = "keyword"> ${this.value} </span>`);
 
-            return `<li> 
-                <span class = "name"> ${cityName}, ${stateName} </span>
-                <span class = "population"> ${numberWithCommas(place.population)} </span> </li>`})
-        .join("");
-        suggestions.innerHTML = html;
+        return `<li> 
+            <span class = "name"> ${cityName}, ${stateName} </span> <br>
+            <span class = "population"> ${numberWithCommas(place.population)} </span> </li>`})
+    .join("");
+    suggestions.innerHTML = html;
+    
 }
-
-const searchInput = document.querySelector(".search");
-const suggestions = document.querySelector(".suggestions");
 
 // change event only plays when we are outside the input
 searchInput.addEventListener("change", displayMatches);
 searchInput.addEventListener("keyup", displayMatches);
+
 
 
 
